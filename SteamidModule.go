@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type browserData struct {
@@ -46,4 +47,24 @@ func friendsDownload(steamID string) {
 		log.Fatalf("Copy from browser: %v", err)
 	}
 	fmt.Println("Successful")
+}
+
+func arrayFriendsFunc(steamID string) []string {
+	var arrayFriends []string
+	file, _ := os.Open(steamID)
+	temp, _ := io.ReadAll(file)
+	readFile := string(temp)
+	lines := strings.Split(readFile, "\n")
+	for _, v := range lines {
+
+		vv := strings.Split(v, ",")
+		link := vv[len(vv)-1]
+		if strings.HasPrefix(link, "https") {
+			arrayFriends = append(arrayFriends, link)
+		}
+
+	}
+
+	return arrayFriends
+
 }
